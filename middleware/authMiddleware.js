@@ -13,12 +13,12 @@ const verifyToken = (req, res, next) => {
         return res.status(401).json({ error: 'Access denied, no token provided' });
     }
 
-    console.log('Verifying token:', token);
+    console.log('Verifying token:', token); // Debug log
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        console.log('Token decoded:', decoded);
-        req.user = decoded; // Attach the decoded token payload to req.user
+        console.log('Token decoded:', decoded); // Debug log
+        req.user = decoded;
         next();
     } catch (err) {
         console.error('Invalid token:', err);

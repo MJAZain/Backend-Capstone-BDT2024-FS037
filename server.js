@@ -2,17 +2,14 @@ const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
-const verifyToken = require('./middleware/authMiddleware');
+const verifyToken = require('./middleware/authMiddleware'); // Import your auth middleware
 
 dotenv.config();
 
 const authRoutes = require('./routes/auth');
 const protectedRoutes = require('./routes/protected');
 const forgotPasswordRoutes = require('./routes/forgot');
-const orderRoutes = require('./routes/order');
-const tourRoutes = require('./routes/tour');
-const orderTourRoutes = require('./routes/orderTour');
-const getTourRoutes = require('./routes/getTour'); // Import getTour route
+const orderRoutes = require('./routes/order'); // Import order routes (now named order.js)
 
 const app = express();
 
@@ -25,28 +22,21 @@ mongoose.connect(process.env.MONGO_URI, {
 })
   .then(() => console.log('MongoDB connected'))
   .catch(err => {
-    console.error('MongoDB connection error:', err);
-    process.exit(1);
+    console.error('MongoDB connection error:', err); // Debug log
+    process.exit(1); // Exit process with failure
   });
 
 // Public Routes
 app.use('/api/auth', authRoutes);
 app.use('/api', forgotPasswordRoutes);
-app.use('/api/tours', tourRoutes);
-app.use('/api/order-tours', verifyToken, orderTourRoutes);
-
-// Protected Routes
 app.use('/api/protected', verifyToken, protectedRoutes);
 app.use('/api/orders', verifyToken, orderRoutes);
 
-// Display Tour Orders Route
-app.use('/api/get-tour-orders', verifyToken, getTourRoutes); // Add this line for displaying tour orders
-
 // Error handling middleware
 app.use((err, req, res, next) => {
-  console.error('Error:', err.stack);
+  console.error('Error:', err.stack); // Debug log
   res.status(500).send('Something broke!');
 });
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5000; // Ensure this port matches your front-end expectations
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

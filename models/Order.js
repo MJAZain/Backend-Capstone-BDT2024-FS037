@@ -4,10 +4,7 @@ const orderSchema = new mongoose.Schema({
     paket: String,
     destinasi: String,
     tanggal: Date,
-    userEmail: {
-        type: String,
-        required: true
-    }
+    userId: mongoose.Schema.Types.ObjectId // Assuming you have a user system in place
 });
 
 const Order = mongoose.model('Order', orderSchema);

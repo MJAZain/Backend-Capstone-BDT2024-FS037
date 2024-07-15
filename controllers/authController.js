@@ -9,6 +9,7 @@ exports.register = async (req, res) => {
     }
 
     try {
+        // Check if the email already exists
         const existingUser = await User.findOne({ email });
         if (existingUser) {
             return res.status(400).json({ error: 'Email already in use' });
@@ -23,10 +24,7 @@ exports.register = async (req, res) => {
         });
         await user.save();
         console.log('User registered successfully'); // Debug log
-        
-        // Include email in the token payload
-        const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '1h' });
-        res.status(201).json({ token, message: 'User registered successfully', name: user.name, email: user.email, phone: user.phone });
+        res.status(201).json({ message: 'User registered successfully' });
     } catch (error) {
         console.log('Error registering user:', error.message); // Debug log
         res.status(400).json({ error: error.message });
@@ -41,10 +39,10 @@ exports.login = async (req, res) => {
         if (!user || !(await user.matchPassword(password))) {
             return res.status(401).json({ error: 'Invalid credentials' });
         }
-        // Include email in the token payload
-        const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '1h' });
-        res.status(200).json({ token, name: user.name, email: user.email, phone: user.phone }); // Return phone along with token, name, and email
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        res.status(200).json({ token, name: user.name, email: user.email }); // Return email along with token and name
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
 };
+
