@@ -35,13 +35,10 @@ app.use('/api', forgotPasswordRoutes);
 app.use('/api/tours', tourRoutes);
 
 // Protected Routes
-app.use('/api/order-tours', verifyToken, (req, res, next) => {
-  console.log('Reached /api/order-tours route in server.js');
-  next();
-}, orderTourRoutes);
+app.use('/api/order-tours', orderTourRoutes); // Ensure this matches the frontend URL
 app.use('/api/protected', verifyToken, protectedRoutes);
 app.use('/api/orders', verifyToken, orderRoutes);
-app.use('/api/get-tour-orders', verifyToken, getTourRoutes); // Add this line for displaying tour orders
+app.use('/api/get-tour-orders', verifyToken, getTourRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

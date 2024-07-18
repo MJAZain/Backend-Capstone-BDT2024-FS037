@@ -15,7 +15,7 @@ exports.getTourImage = async (req, res) => {
         if (!tour) {
             return res.status(404).send('Tour not found');
         }
-        res.set('Content-Type', 'image/jpeg'); // Set the appropriate content type
+        res.set('Content-Type', 'image/jpeg');
         res.send(tour.image);
     } catch (error) {
         res.status(500).json({ error: 'Error retrieving tour image: ' + error });

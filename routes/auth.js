@@ -18,7 +18,7 @@ router.post('/register', async (req, res) => {
             password
         });
         await user.save();
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '12h' });
         res.status(201).json({ token });
     } catch (error) {
         res.status(400).json({ error: error.message });
@@ -38,7 +38,7 @@ router.post('/login', async (req, res) => {
 
         console.log('User found:', user); 
         
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '12h' });
 
         res.status(200).json({ token, name: user.name, email: user.email });
     } catch (error) {
